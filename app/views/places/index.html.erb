@@ -1,0 +1,53 @@
+<h2>places
+<%- if user_signed_in? %>
+      <%= link_to 'Add a place', new_place_path, class: "btn btn-default" %>
+<% end %>
+</h2>
+
+<div class="row">
+  <%- @places.each do |place| %>
+
+    <div class="col-xs-4 place">
+      <h4><%= place.kind %></h4>
+      <p><%= place.description%>
+        <%= link_to 'Request a reservation',  place_reservations_path(place), method: 'post', :class => "btn btn-primary" %>
+      </p>
+    </div>
+
+<% end %>
+</div>
+<%- if user_signed_in? %>
+
+<div class="row">
+  <div class="col-xs-6">
+    <h3>places I'm reservationing</h3>
+  <%- current_user.reservations.each do |reservation| %>
+    <div class="row">
+      <div class="col-lg-4 col-lg-offset-1">
+        <p>
+          <%= reservation.place.kind %>
+          <%= reservation.status %>
+          <%= link_to 'Details', place_path(reservation.place) %></p>
+      </div>
+    </div>
+  <% end %>
+  </div>
+
+  <div class="col-xs-6">
+  <h3>People reservationing My places</h3>
+  <%- current_user.places.each do |place| %>
+    <h4> <%= place.kind %> </h4>
+      <%- place.reservations.each do |reservation| %>
+        <p><%= reservation.guest.email %></p>
+        <p><%= reservation.status %></p>
+        <%- if reservation.pending? %>
+          <%= link_to 'Reject',  reject_reservation_path(reservation), method: 'post', :class => "btn btn-danger" %>
+           <%= link_to 'Accept',  accept_reservation_path(reservation), method: 'post', :class => "btn btn-success" %>
+        <%- end %>
+
+      <% end %>
+  <% end %>
+  </div>
+</div>
+
+<% end %>

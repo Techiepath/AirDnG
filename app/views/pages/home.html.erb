@@ -1,0 +1,16 @@
+<h1>AirDnG</h1>
+<p>This is the home page</p>
+<p>This would be another paragraph </p>
+<%= link_to 'FAQ', pages_faq_path %>
+
+<div class="jumbotron center">
+     <h1>Welcome to my app!</h1>
+     <% if user_signed_in? %>
+          # do something
+     <% else %>
+       <p>
+         <%= link_to "Log in", new_user_session_path, class: "btn btn-default btn-lg" %>
+         <%= link_to "Sign up", new_user_registration_path, class: "btn btn-primary btn-lg" %>
+       </p>
+  <% end %>  
+</div>

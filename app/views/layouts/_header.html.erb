@@ -1,0 +1,17 @@
+<nav class="navbar-default navbar" role="navigation">
+<div class="navbar-header">
+<%= link_to 'AirDnG', root_path, :class => "navbar-brand" %>
+
+</div>
+
+<div class="navbar-right">
+	<% if user_signed_in? %>
+		<%= link_to "Log out", destroy_user_session_path, method: :delete, :class => 'navbar-link' %> | 
+		<%= link_to "Edit Profile", edit_user_registration_path, :class => 'navbar-link' %>
+	<% else %>
+		<%= link_to "Sign in", new_user_session_path, :class => 'navbar-link' %> | 
+		<%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %>
+	<% end %>
+</div>
+
+</nav>
