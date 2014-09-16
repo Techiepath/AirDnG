@@ -1,0 +1,18 @@
+<h1>Editing Reservation</h1>
+
+<%= form_for @reservation, :html => {:multipart => true} %>
+
+  <div class="form-group">
+    <strong>Check in:<%= reservation.date_field('check_in', :start => Time.now ) %> </strong>
+  </div>
+  <div class='form-group'>
+    <strong>Check out:<%= reservation.date_field('check_out', default: 3.days.from_now ) %></strong>
+  </div>
+  <div>
+  <%= f.submit(:class => "btn btn-primary") %>
+</div>
+<% end %>
+
+
+<%= link_to 'Show', @reservation %>
+<%= link_to 'Back', reservations_path %>

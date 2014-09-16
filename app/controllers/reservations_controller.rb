@@ -1,24 +1,51 @@
 class ReservationsController < ApplicationController
-def create
-    redirect_to places_path
-    Reservation.create(guest: current_user, place: Place.find(params[:place_id]))
-
+  
+  
+  def new
+    @reservation = Reservation.new
   end
 
-  def reject
-    load_reservation.reject!
-    redirect_to places_path
+  def create
+    @reservation = Reservation.new(reservation_params)
+    if @reservation.save
+      
+      redirect_to @reservation, :notice => "Reservation Created!"
+    else
+      redirect_to "back", :notice => "Unable to add reservation!"
+    end
   end
 
-  def accept
-    load_reservation.accept!
-    redirect_to places_path
+  def edit
+    @reservation = Reservation.find(params[:id])
   end
+
+  def update
+    @reservation = Reservation.find(params[:id])
+    if @reservation.update_attributes(reservation_params)
+      redirect_to "/reservationsedit", :notice => "Reservation updated!"
+    else
+      redirect_to "/reservationsedit", :notice => "Unable to update reservation!"
+    end
+  end
+
+  def destroy
+    reservation = Reservation.find(params[:id])
+    if reservation.destroy
+      redirect_to "/reservationsedit", :notice => "Reservation Removed!"
+    else
+      redirect_to "/reservationsedit", :notice => "Unable to remove Reservation!"
+    end
+  end
+
+ 
+
+
+
+ 
 
   private
-
-  def load_reservation()
-    current_user.visits.find(params[:id])
-  end
-
+    def reservation_params
+      params.require(:reservation).permit(:place_id, :guest_id, :check_in, :check_out)
+    end
+    
 end

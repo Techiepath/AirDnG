@@ -1,6 +1,8 @@
 class PlacesController < ApplicationController
-def index
-		@places = Place.all
+	before_action :authenticate_user!, except: [:index]
+  	
+	def index
+		@places = Place.all.order("created_at DESC")
 	end
 
 	def new
@@ -9,25 +11,26 @@ def index
 
 	def show
 		@place = Place.find(params[:id])
+		@reservation = Reservation.new
+	end
+	def edit
+		@place = Place.find(params[:id])
 	end
 
 	def create
-		if !user_signed_in?
-			redirect_to new_user_session_path
-		else
-			@place = current_user.places.new(place_params)
+    	@place = current_user.places.build(place_params)
+    if @place.save
+      redirect_to @place, notice: 'Your place can now be rented!'
+    else
+      render action: 'new'
+    end
+  end
 
-			respond_to do |format|
-				if @place.save
-					format.html { redirect_to @place, notice: 'Pet was successfully created.' }
-					format.json { render action: 'show', status: :created, location: @place }
-				else
-					format.html { render action: 'new' }
-					format.json { render json: @place.errors, status: :unprocessable_entity }
-				end
-			end
-		end
-	end
+  def destroy
+    @place = Place.find(params[:id])
+    @place.destroy
+    redirect_to places_url
+  end
 
 	def place_params
 		params.require(:place).permit(:kind, :address, :state, :price, :description, :availability)
