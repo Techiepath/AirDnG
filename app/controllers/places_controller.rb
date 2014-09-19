@@ -1,17 +1,18 @@
 class PlacesController < ApplicationController
-	before_action :authenticate_user!, except: [:index]
+	
+  before_action :authenticate_user!, except: [:index]
+	
   	
 	def index
 		@places = Place.all.order("created_at DESC")
 	end
 
 	def new
-		@place = Place.new
+		@place = current_user.places.build
 	end
 
 	def show
 		@place = Place.find(params[:id])
-		@reservation = Reservation.new
 	end
 	def edit
 		@place = Place.find(params[:id])
@@ -31,6 +32,15 @@ class PlacesController < ApplicationController
     @place.destroy
     redirect_to places_url
   end
+
+  private
+  	def set_place
+      @place = Place.find(params[:id])
+    end
+    def correct_user
+      @place = current_user.places.find_by(id: params[:id])
+      redirect_to placess_path, notice: "Not authorized to edit this place" if @place.nil?
+    end
 
 	def place_params
 		params.require(:place).permit(:kind, :address, :state, :price, :description, :availability)

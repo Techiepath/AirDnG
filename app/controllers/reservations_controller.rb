@@ -1,19 +1,28 @@
 class ReservationsController < ApplicationController
   
-  
+  def index
+    @reservation = Reservation.all
+  end
+
+  def show
+    @reservation = Reservation.find(params[:id])
+  end
+
   def new
-    @reservation = Reservation.new
+    @reservation = current_user.reservations.build
   end
 
   def create
-    @reservation = Reservation.new(reservation_params)
+    @reservation = current_user.reservations.build(reservation_params)
     if @reservation.save
-      
-      redirect_to @reservation, :notice => "Reservation Created!"
+      redirect_to @reservation, :notice => "Successfully booked this place"
     else
-      redirect_to "back", :notice => "Unable to add reservation!"
+      render :action => 'new'
     end
   end
+
+
+
 
   def edit
     @reservation = Reservation.find(params[:id])
@@ -22,19 +31,16 @@ class ReservationsController < ApplicationController
   def update
     @reservation = Reservation.find(params[:id])
     if @reservation.update_attributes(reservation_params)
-      redirect_to "/reservationsedit", :notice => "Reservation updated!"
+      redirect_to reservations_path, :notice => "Reservation updated!"
     else
-      redirect_to "/reservationsedit", :notice => "Unable to update reservation!"
+      render :action => 'edit'
     end
   end
 
   def destroy
-    reservation = Reservation.find(params[:id])
-    if reservation.destroy
-      redirect_to "/reservationsedit", :notice => "Reservation Removed!"
-    else
-      redirect_to "/reservationsedit", :notice => "Unable to remove Reservation!"
-    end
+    @reservation = Reservation.find(params[:id])
+    @reservation.destroy
+    redirect_to reservations_url, :notice => "Successfully destroyed reservation."
   end
 
  
@@ -45,7 +51,7 @@ class ReservationsController < ApplicationController
 
   private
     def reservation_params
-      params.require(:reservation).permit(:place_id, :guest_id, :check_in, :check_out)
+      params.require(:reservation).permit(:check_in, :check_out)
     end
     
 end
