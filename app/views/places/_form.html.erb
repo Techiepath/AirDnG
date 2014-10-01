@@ -2,6 +2,9 @@
 
 
     <div class="form-group" >
+       <p><%= f.label :title %> 
+      <%= f.text_field :title,  class: "form-control", placeholder: "Ex. Swanky pad near the river" %>
+      </p>
       <p><%= f.label :kind %> 
       <%= f.text_field :kind,  class: "form-control", placeholder: "House, Apartment, or Condo?" %>
       </p>
@@ -17,11 +20,6 @@
       <p><%= f.label :description %>
       <%= f.text_field :description,  class: "form-control", placeholder: "Give some details about your place" %>
       </p>
-
-      <p> <%= f.label :availability %> 
-      <%= f.text_field :availability,  class: "form-control", placeholder: "When do you want to rent it out?" %>
-      </p>
- 
       <p><%= f.label :price %> 
       <%= f.text_field :price,  class: "form-control", placeholder: "What is the nightly rent?" %>
       </p>

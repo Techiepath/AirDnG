@@ -6,15 +6,15 @@
 
       <p class="content">
         <div class="panel-body">
-          <p>Type:<strong><%= place.kind %></strong></p>
-          <p>Location:<strong><%= place.address %></strong></p>
-          <p>State:<strong><%= place.state %></strong></p>
-          <p>Price:<strong><%= place.price %></strong></p>
-          <p>Availability:<strong><%= place.availability %></strong></p>
-          <p>Details:<strong><%= place.description %></strong></p>
+          <h4><strong>Title: </strong><%= place.title %></h4>
+          <p><strong>Type: </strong><%= place.kind %></p>
+          <p><strong>Location: </strong><%= place.address %></p>
+          <p><strong>State: </strong><%= place.state %></p>
+          <p><strong>Price: </strong><%= place.price %></p>
+          <p><strong>Details: </strong><%= place.description %></p>
 
 
-          <strong><%= link_to 'Reserve', place_path(place) %></strong>
+          <strong><%= link_to 'More info', place_path(place) %></strong>
         </br>
         </br>
 

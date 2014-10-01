@@ -10,18 +10,34 @@
       </div>
     
     <div class="panel-body">
-      <p>Type:<strong><%= @place.kind %> </strong></p>
-      <p>Address:<strong><%= @place.address %> </strong></p>
-      <p>State:<strong><%= @place.state %> </strong></p>
-      <p>Description:<strong><%= @place.description %> </strong></p>
-      <p>Price/Night:<strong> <%= @place.price %> </strong></p>
-      <p>Availability:<strong> <%= @place.availability %> </strong></p>
-
+      <h4><%= @place.title %> </h4>
+      <p><strong>Type: </strong><%= @place.kind %> </p>
+      <p><strong>Address: </strong><%= @place.address %> </p>
+      <p><strong>State: </strong><%= @place.state %> </p>
+      <p><strong>Description: </strong><%= @place.description %> </p>
+      <p><strong>Price/Night: </strong> <%= @place.price %> </p>
+      
     </div>
-   <%= link_to "Reserve", new_reservation_path(@place) %>
+ 
   </div>
 
+<div class="form-group">
+  <form action="<%= place_reservations_url(@place) %>" method="post" id="reservation_form">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token%>">
+    <input type="hidden" name="reservation[place_id]" value="<%= @place.id %>">
+    <input type="hidden" name="reservation[user_id]" value="<%= current_user.id %>">
+    <label for="reservation_check_in">Check In: </label>
+    <input type="date" name="reservation[check_in]" id="reservation_check_in">
+    <br><br>
 
+    <label for="reservation_check_out">Check Out: </label>
+    <input type="date" name="reservation[check_out]" id="reservation_check_out">
+    <br><br>
+    <input type="submit" value="Submit Request!" class="btn submit_button">
+  </form>
 </div>
 
-</div>
+
+
+
+  

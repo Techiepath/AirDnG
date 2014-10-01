@@ -1,21 +1,20 @@
 class ReservationsController < ApplicationController
   
-  def index
-    @reservation = Reservation.all
-  end
+ 
 
-  def show
-    @reservation = Reservation.find(params[:id])
-  end
 
   def new
-    @reservation = current_user.reservations.build
+    
+    @place = Place.find(params[:place_id])
+
   end
+  
+  
 
   def create
-    @reservation = current_user.reservations.build(reservation_params)
+     @reservation = Reservation.create(reservation_params)
     if @reservation.save
-      redirect_to @reservation, :notice => "Successfully booked this place"
+      redirect_to place_reservations_path, :notice => "Successfully booked this place"
     else
       render :action => 'new'
     end
@@ -31,7 +30,7 @@ class ReservationsController < ApplicationController
   def update
     @reservation = Reservation.find(params[:id])
     if @reservation.update_attributes(reservation_params)
-      redirect_to reservations_path, :notice => "Reservation updated!"
+      redirect_to place_reservations_path, :notice => "Reservation updated!"
     else
       render :action => 'edit'
     end
@@ -43,15 +42,58 @@ class ReservationsController < ApplicationController
     redirect_to reservations_url, :notice => "Successfully destroyed reservation."
   end
 
+   
+
+  def accept
+    reservation= Reservation.find(params[:id])
+    reservation.accept
+
+    redirect_to reservations_path
+  end
+
+  def reject
+    reservation = Reservation.find(params[:id])
+    reservation.reject
+
+    redirect_to reservations_path
+  end
+
+  def show
+    @reservation = Reservation.find(params[:id])
+  end
+
  
+  def index
+    
+    @accepted_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: "accepted")
+    @rejected_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: "rejected")
+    @pending_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: nil)
+  end
 
 
+ def reject
+    @reservation = Reservation.find_by_id(params[:id])
 
- 
+    if @reservation.place.owner_id == current_user.id
+      @reservation.update_status("reject")
+    end
+
+    redirect_to(:back)
+  end
+
+  def accept
+    @reservation = Reservation.find_by_id(params[:id])
+
+    if @reservation.place.owner_id == current_user.id
+      @reservation.update_status("accept")
+    end
+
+    redirect_to(:back)
+  end
 
   private
     def reservation_params
-      params.require(:reservation).permit(:check_in, :check_out)
+      params.require(:reservation).permit(:check_in, :check_out, :user_id, :place_id, :status)
     end
     
 end

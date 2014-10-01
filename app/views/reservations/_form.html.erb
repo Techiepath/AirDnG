@@ -1,13 +1,17 @@
-<h4> Book your stay! </h4>
-<%= form_for @reservation, url: reservations_path, method: :post, :html => { :multipart => true } do |f| %>
- 
-  <%= f.hidden_field :user_id, :value => current_user.id %>
+
+
+<%= form_for @reservation, url: place_reservations_url , method: :post, :html => { :multipart => true } do |f| %>
+  
+   <%= f.hidden_field :place_id, :value => @place.id %>
+  <%= f.hidden_field :user_id, :value => current_user.id %>  
+  
+  
   
   <div class="form-group">
-    <strong>Check in:<%= f.date_field('check_in', :start => Time.now ) %> </strong>
+    <strong>Check in:<%= f.date_field('check_in') %> </strong>
   </div>
   <div class='form-group'>
-    <strong>Check out:<%= f.date_field('check_out', default: 3.days.from_now ) %></strong>
+    <strong>Check out:<%= f.date_field('check_out') %></strong>
   </div>
   <div>
   <%= f.submit(:class => "btn btn-primary") %>

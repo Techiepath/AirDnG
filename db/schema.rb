@@ -11,36 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140919193840) do
-
-  create_table "guests", force: true do |t|
-    t.integer  "reservation_id"
-    t.string   "name"
-    t.integer  "phone_number"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(version: 20141001193218) do
 
   create_table "places", force: true do |t|
     t.string   "address"
     t.integer  "price"
     t.text     "description"
-    t.string   "availability"
     t.string   "kind"
     t.string   "state"
     t.integer  "owner_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "user_id"
+    t.string   "title"
   end
 
   create_table "reservations", force: true do |t|
+    t.integer  "user_id"
     t.integer  "place_id"
-    t.integer  "guest_id"
-    t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "status"
     t.date     "check_in"
     t.date     "check_out"
   end

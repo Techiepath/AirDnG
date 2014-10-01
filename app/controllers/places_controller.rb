@@ -11,21 +11,35 @@ class PlacesController < ApplicationController
 		@place = current_user.places.build
 	end
 
-	def show
-		@place = Place.find(params[:id])
-	end
-	def edit
-		@place = Place.find(params[:id])
-	end
-
-	def create
-    	@place = current_user.places.build(place_params)
+  def create
+      @place = current_user.places.build(place_params)
     if @place.save
       redirect_to @place, notice: 'Your place can now be rented!'
     else
       render action: 'new'
     end
   end
+
+	def show
+		@place = Place.find(params[:id])
+    @reservation = Reservation.new
+  end
+
+    
+	
+	def edit
+		@place = Place.find(params[:id])
+	end
+  def update
+    @place = Place.find(params[:id])
+    if @place.update(place_params)
+      redirect_to @place, notice: 'Your place was successfully updated.'
+    else
+      render action: 'edit'
+    end
+  end
+
+	
 
   def destroy
     @place = Place.find(params[:id])
@@ -43,6 +57,6 @@ class PlacesController < ApplicationController
     end
 
 	def place_params
-		params.require(:place).permit(:kind, :address, :state, :price, :description, :availability)
+		params.require(:place).permit(:kind, :address, :state, :price, :description, :title)
 	end
 end
