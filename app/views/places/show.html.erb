@@ -4,6 +4,16 @@
   <div class="col-md-offset-2 col-md-8">
     <div class="panel panel-default">
       <div class="panel-heading center">
+    <% if current_user.id == @place.owner_id %>
+    <div class="owner_options">
+      <%= link_to "View Rental Requests",  
+          place_reservations_url(@place), 
+          class: "btn show_link_button" %>
+  </div>
+
+  <% end %>
+    
+      
      
   
        
@@ -20,6 +30,10 @@
     </div>
  
   </div>
+
+
+
+
 
 <div class="form-group">
   <form action="<%= place_reservations_url(@place) %>" method="post" id="reservation_form">

@@ -1,8 +1,75 @@
-<div id="tabs" class="tabs_box_request">
+<div id="tabs" class="tabs_box_reservation">
   <ul class="height_adjust">
-    <li><a href="#tabs-1">Current Reservations</a></li>
-    <li><a href="#tabs-2">Pending Reservations: <%= @pending_reservations.count %></a></li>
-    <li><a href="#tabs-3">Denied Reervations</a></li>
+    <li><a href="#tabs-1">Current Reservations: <%= @pending_reservations.count %></a></li>
+    <li><a href="#tabs-2">Pending reservations: <%= @pending_reservations.count %></a></li>
+    <li><a href="#tabs-3">Denied reservations: <%= @denied_reservations.count %></a></li>
   </ul>
 
+  <div id="tabs-1">
+    <% @approved_reservations.each do |reservation| %>
+      <div class="rental_reservation" 
+           data-id="<%= reservation.id %>"
+           data-place="<%= reservation.place_id %>">
+        <h6>Guest name: <%= reservation.user.name %></h6>
+        <h6>Guest email: <%= reservation.user.email %></h6>
+        <ul class="rental_reservation_ul">
+          <li>Check In: <%= reservation.check_in %></li>
+          <li>Check Out: <%= reservation.check_out %></li>
+        </ul>
+        <p>Current Status: <%= reservation.status.capitalize %></p>
+      </div>
+    <% end %>
+  </div>
 
+  <div id="tabs-2">
+     <% @pending_reservations.each do |reservation| %>
+       <div class="rental_reservation" 
+           data-id="<%= reservation.id %>"
+           data-place="<%= reservation.place_id %>">
+        <h6>Guest name: <%= reservation.user.name %></h6>
+        <h6>Guest email: <%= reservation.user.email %></h6>
+        <ul class="rental_reservation_ul">
+          <li>Check In: <%= reservation.check_in %></li>
+          <li>Check Out: <%= reservation.check_out %></li>
+        </ul>
+        <p>Current Status: Pending</p>
+        <%= link_to "Approve", 
+            accept_place_reservation_url(@place, reservation),
+            class: "btn btn-success link_button" %>
+        <%= link_to "Deny", 
+            reject_place_reservation_url(@place, reservation),
+            class: "btn btn-danger link_button" %>
+      </div>
+    <% end %>
+
+  </div>
+
+  <div id="tabs-3">
+     <% @denied_reservations.each do |reservation| %>
+       <div class="rental_reservation" 
+           data-id="<%= reservation.id %>"
+           data-place="<%= reservation.place_id %>">
+        <h6>Guest name: <%= reservation.user.name %></h6>
+        <h6>Guest email: <%= reservation.user.email %></h6>
+        <ul class="rental_reservation_ul">
+          <li>Check In: <%= reservation.check_in %></li>
+          <li>Check Out: <%= reservation.check_out %></li>
+        </ul>
+        <% if reservation.status == "approved" || reservation.status == "denied" %>
+          <p>Current Status: <%= reservation.status.capitalize %></p>
+        <% else %>
+          <%= link_to "Approve", 
+              accept_place_reservation_url(@place, reservation),
+              class: "btn btn-success link_button" %>
+          <%= link_to "Deny", 
+              reject_place_reservation_url(@place, reservation),
+              class: "btn btn-danger link_button" %>
+        <% end %>
+      </div>
+    <% end %>
+
+  </div>
+
+<br>
+
+<%= link_to "Back To Place", place_url(@place), class: "btn btn-primary link_button float_left" %>

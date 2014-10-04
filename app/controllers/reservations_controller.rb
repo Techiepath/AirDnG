@@ -1,16 +1,9 @@
 class ReservationsController < ApplicationController
   
- 
-
-
-  def new
-    
-    @place = Place.find(params[:place_id])
-
+  def new 
+    @reservation = Reservation.new
   end
   
-  
-
   def create
      @reservation = Reservation.create(reservation_params)
     if @reservation.save
@@ -19,8 +12,6 @@ class ReservationsController < ApplicationController
       render :action => 'new'
     end
   end
-
-
 
 
   def edit
@@ -43,47 +34,43 @@ class ReservationsController < ApplicationController
   end
 
    
-
-  def accept
-    reservation= Reservation.find(params[:id])
-    reservation.accept
-
-    redirect_to reservations_path
-  end
-
-  def reject
-    reservation = Reservation.find(params[:id])
-    reservation.reject
-
-    redirect_to reservations_path
-  end
-
   def show
     @reservation = Reservation.find(params[:id])
   end
 
  
   def index
-    
-    @accepted_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: "accepted")
-    @rejected_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: "rejected")
-    @pending_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: nil)
+    @approved_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: "approved")
+    @denied_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: "denied")
+    @pending_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: nil)   
+  
+    if params[:place_id]
+      @place = Place.find_by_id(params[:place_id])
+
+      if @place.owner.id == current_user.id
+        render @reservation
+      else
+        flash[:notices] = ["You must log in as the owner of a space in order to view that page"]
+        redirect_to @place 
+      end
+    else
+      @user = User.find_by_id(current_user.id)
+
+      render '"user/index/user"'
+    end
   end
 
 
  def reject
     @reservation = Reservation.find_by_id(params[:id])
-
     if @reservation.place.owner_id == current_user.id
       @reservation.update_status("reject")
     end
-
     redirect_to(:back)
   end
 
   def accept
     @reservation = Reservation.find_by_id(params[:id])
-
     if @reservation.place.owner_id == current_user.id
       @reservation.update_status("accept")
     end
