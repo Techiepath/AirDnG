@@ -1,12 +1,12 @@
 <div id="tabs" class="tabs_box_reservation">
   <ul class="height_adjust">
-    <li><a href="#tabs-1">Current Reservations: <%= @pending_reservations.count %></a></li>
+    <li><a href="#tabs-1">Accepted Reservations: <%= @accepted_reservations.count %></a></li>
     <li><a href="#tabs-2">Pending reservations: <%= @pending_reservations.count %></a></li>
-    <li><a href="#tabs-3">Denied reservations: <%= @denied_reservations.count %></a></li>
+    <li><a href="#tabs-3">Rejected reservations: <%= @rejected_reservations.count %></a></li>
   </ul>
 
   <div id="tabs-1">
-    <% @approved_reservations.each do |reservation| %>
+    <% @accepted_reservations.each do |reservation| %>
       <div class="rental_reservation" 
            data-id="<%= reservation.id %>"
            data-place="<%= reservation.place_id %>">
@@ -33,10 +33,10 @@
           <li>Check Out: <%= reservation.check_out %></li>
         </ul>
         <p>Current Status: Pending</p>
-        <%= link_to "Approve", 
+        <%= link_to "Accept", 
             accept_place_reservation_url(@place, reservation),
             class: "btn btn-success link_button" %>
-        <%= link_to "Deny", 
+        <%= link_to "Reject", 
             reject_place_reservation_url(@place, reservation),
             class: "btn btn-danger link_button" %>
       </div>
@@ -45,7 +45,7 @@
   </div>
 
   <div id="tabs-3">
-     <% @denied_reservations.each do |reservation| %>
+     <% @rejected_reservations.each do |reservation| %>
        <div class="rental_reservation" 
            data-id="<%= reservation.id %>"
            data-place="<%= reservation.place_id %>">
@@ -55,13 +55,13 @@
           <li>Check In: <%= reservation.check_in %></li>
           <li>Check Out: <%= reservation.check_out %></li>
         </ul>
-        <% if reservation.status == "approved" || reservation.status == "denied" %>
+        <% if reservation.status == "accepted" || reservation.status == "denied" %>
           <p>Current Status: <%= reservation.status.capitalize %></p>
         <% else %>
-          <%= link_to "Approve", 
+          <%= link_to "Accept", 
               accept_place_reservation_url(@place, reservation),
               class: "btn btn-success link_button" %>
-          <%= link_to "Deny", 
+          <%= link_to "Reject", 
               reject_place_reservation_url(@place, reservation),
               class: "btn btn-danger link_button" %>
         <% end %>

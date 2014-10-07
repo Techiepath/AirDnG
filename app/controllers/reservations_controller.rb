@@ -40,25 +40,12 @@ class ReservationsController < ApplicationController
 
  
   def index
-    @approved_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: "approved")
-    @denied_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: "denied")
-    @pending_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: nil)   
-  
-    if params[:place_id]
-      @place = Place.find_by_id(params[:place_id])
-
-      if @place.owner.id == current_user.id
-        render @reservation
-      else
-        flash[:notices] = ["You must log in as the owner of a space in order to view that page"]
-        redirect_to @place 
-      end
-    else
-      @user = User.find_by_id(current_user.id)
-
-      render '"user/index/user"'
-    end
+    @place = Place.find(params[:place_id])
+    @accepted_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: "accepted")
+    @rejected_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: "rejected")
+    @pending_reservations = Reservation.includes(:user).where(place_id: params[:place_id], status: nil)
   end
+  
 
 
  def reject

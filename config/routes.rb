@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
  
-  
+  resources :displays, only: [:index]
 
   resources :places do
   	resources :reservations do
