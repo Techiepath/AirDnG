@@ -7,8 +7,9 @@ class DisplaysController < ApplicationController
     @reservations = Reservation.includes(:place)
                                 .where(user_id: current_user.id)
                                 .order("check_in")
-    @current_reservations = @reservations.current_reservations
+    @accepted_reservations = @reservations.accepted_reservations
     @pending_reservations = @reservations.pending_reservations
-    @past_reservations = @reservations.past_reservations
+    
+    
   end
 end

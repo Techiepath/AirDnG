@@ -3,9 +3,9 @@ class Reservation < ActiveRecord::Base
 	belongs_to :user
 	
 
-  def self.current_reservations
+  def self.accepted_reservations
     self.select do |reservation| 
-      reservation.status == "approved" && reservation.check_out > Date.today
+      reservation.status == "accepted" && reservation.check_out > Date.today
     end
   end
 
@@ -14,13 +14,6 @@ class Reservation < ActiveRecord::Base
       reservation.status == nil && reservation.check_in > Date.today
     end
   end
-
-  def self.past_reservations
-    self.select do |reservation|
-      reservation.check_out < Date.today
-    end
-  end
-
 
 
 	def update_status(method)
@@ -44,5 +37,17 @@ class Reservation < ActiveRecord::Base
      self.status = "approved"
       self.save!
   end
+
+
+  ####Cost####
+
+  def duration
+    (self.check_out - self.check_in).to_i
+  end
+
+  def total
+    self.duration * place.price
+  end
+
 
 end

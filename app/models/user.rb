@@ -4,6 +4,9 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  
+  validates :name, presence: true
+
      
   has_many :places, foreign_key: :owner_id
   has_many :reservations

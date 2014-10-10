@@ -1,23 +1,14 @@
-<div class="dashboard">
-  <ul class="nav nav-pills" id="dashboard_nav">
-    <li class="active"><a class="dash" href="/dashboard">Dashboard</a></li>
-    
-    <li><a class="dash" href="/users/<%= current_user.id %>/edit">Edit Profile</a></li>
-    <li><a class="dash" href="/users/<%= current_user.id %>">My Profile</a></li>
-  </ul>
-</div>
-
-<div id="tabs" class="user_tabs_box">
-  <ul>
-    <li><a href="#tabs-1">Your Properties</a></li>
-    <li><a href="#tabs-2">Current Trips</a></li>
-    <li><a href="#tabs-3">Pending Trips</a></li>
-    <li><a href="#tabs-4">Past Trips</a></li>
+<div class="display">
+  <ul class="nav nav-pills" id="display_nav">
+  
+    <li><a href="#tabs-1">Your Places</a></li>
+    <li><a href="#tabs-2">Accepted Reservations</a></li>
+    <li><a href="#tabs-3">Pending Reservations</a></li>
   </ul>
 
   <div id="tabs-1">
     <div class="title">
-      <h4>Your Properties:</h4>
+      <h4>Your Places:</h4>
     </div>
     <div class="container"> 
       <% @places.each do |place| %>
@@ -29,31 +20,32 @@
           </ul>
         </div>
       <% end %>
-      <% unless @places.empty? %>
-        <% if current_user.id == @places.owner_id %>
-          <div class="create_new_place inner">
+      <% if @places.empty? %>
+        <div class="create_new_place inner">
             <div class="float_to_center">
-              <h4><%= link_to 'List A New Place!', new_place_path %></h4>
+              <h4><%= link_to 'List Your Place!', new_place_path %></h4>
             </div>
           </div>
         <% end %>
-      <% end %>
+    
     </div>
   </div>
 
   <div id="tabs-2">
-    <% unless @current_reservations.empty? %>
+    <% unless @accepted_reservations.empty? %>
       <div class="title">
-        <h4>Your Current Reservations:</h4>
+        <h4>Your Accepted Reservations:</h4>
       </div>
 
       <div class="generic">
-        <% @current_reservations.each do |reservation| %>
+        <% @accepted_reservations.each do |reservation| %>
           <div class="trip_display">
-            <h4>Your Trip To <%= reservation.place.title %>:</h4>
+            <h5>Your Trip To: <%= reservation.place.title %></h5>
             <ul>
               <li>From: <%= reservation.check_in.strftime("%m/%d/%Y") %></li>
               <li>To: <%= reservation.check_out.strftime("%m/%d/%Y") %></li>
+              <li>To: <%= reservation.total %></li>
+
             </ul>
             <%= link_to "Property Details", place_url(trip.place), class: "btn" %>
             
@@ -70,16 +62,19 @@
   <div id="tabs-3">
     <% unless @pending_reservations.empty? %>
       <div class="title">
-        <h1>Pending Reservations:</h1>
+        <h4>Pending Reservations:</h4>
       </div>
 
       <div class="generic">
         <% @pending_reservations.each do |reservation| %>
           <div class="trip_display">
-            <h4>Your Trip To <%= reservation.place.title %>:</h4>
+            <h5>Your Trip To:  <%= reservation.place.title %></h5>
             <ul>
-              <li>From: <%= reservation.check_in.strftime("%m/%d/%Y") %></li>
-              <li>To: <%= reservation.check_out.strftime("%m/%d/%Y") %></li>
+              <li>Owner Contact Info: <%= reservation.place.owner.email %></li> 
+              <li>Check In: <%= reservation.check_in.strftime("%m/%d/%Y") %></li>
+              <li>Check Out: <%= reservation.check_out.strftime("%m/%d/%Y") %></li>
+              <li>Total Cost: $<%= reservation.total %></li>
+              
             </ul>
             <%= link_to "Property Details", place_url(reservation.place), class: "btn" %>
             
@@ -93,22 +88,4 @@
     <% end %>
   </div>
 
-  <div id="tabs-4">
-    <% unless @past_reservations.empty? %>
-      <div class="title">
-        <h1>Memories:</h1>
-      </div>
-      <div class="generic">
-        <% @past_reservations.each do |reservation| %>
-          <div class="trip_display">
-            <h4>Your Past Trip To <%= reservation.place.title %>:</h4>
-            <ul>
-              <li>From: <%= reservation.check_in.strftime("%m/%d/%Y") %></li>
-              <li>To: <%= reservation.check_out.strftime("%m/%d/%Y") %></li>
-            </ul>
-            <%= link_to "Property Details", place_url(reservation.place), class: "btn" %>
-            
-            <% end %>
-            <% end %>
-
-
+  

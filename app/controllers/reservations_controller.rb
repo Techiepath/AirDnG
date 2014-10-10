@@ -7,7 +7,7 @@ class ReservationsController < ApplicationController
   def create
      @reservation = Reservation.create(reservation_params)
     if @reservation.save
-      redirect_to place_reservations_path, :notice => "Successfully booked this place"
+      redirect_to displays_path, :notice => "Successfully booked this place"
     else
       render :action => 'new'
     end
@@ -49,17 +49,17 @@ class ReservationsController < ApplicationController
 
 
  def reject
-    @reservation = Reservation.find_by_id(params[:id])
+    @reservation = Reservation.find(params[:id])
     if @reservation.place.owner_id == current_user.id
-      @reservation.update_status("reject")
+      @reservation.update_status("rejected")
     end
     redirect_to(:back)
   end
 
   def accept
-    @reservation = Reservation.find_by_id(params[:id])
+    @reservation = Reservation.find(params[:id])
     if @reservation.place.owner_id == current_user.id
-      @reservation.update_status("accept")
+      @reservation.update_status("accepted")
     end
 
     redirect_to(:back)
