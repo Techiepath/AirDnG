@@ -51,7 +51,7 @@ class ReservationsController < ApplicationController
  def reject
     @reservation = Reservation.find(params[:id])
     if @reservation.place.owner_id == current_user.id
-      @reservation.update_status("rejected")
+      @reservation.set_status("rejected")
     end
     redirect_to(:back)
   end
@@ -59,7 +59,7 @@ class ReservationsController < ApplicationController
   def accept
     @reservation = Reservation.find(params[:id])
     if @reservation.place.owner_id == current_user.id
-      @reservation.update_status("accepted")
+      @reservation.set_status("accepted")
     end
 
     redirect_to(:back)

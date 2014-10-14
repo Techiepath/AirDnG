@@ -16,10 +16,6 @@ class Reservation < ActiveRecord::Base
   end
 
 
-	def update_status(method)
-    self.public_send(method)
-  end
-
   def set_status(status)
     self.update_attributes!(status: status)
   end
@@ -27,14 +23,14 @@ class Reservation < ActiveRecord::Base
 
 
   def reject
-    self.status = "denied"
+    self.status = "rejected"
     self.save!
   end
 
 
 
   def accept
-     self.status = "approved"
+     self.status = "accepted"
       self.save!
   end
 
